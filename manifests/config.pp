@@ -60,6 +60,7 @@
 # Gary Larizza <gary@puppetlabs.com>
 #
 define haproxy::config (
+  $collect_exported=true,
   $virtual_ip_port,
   $order                     = '20',
   $virtual_ip                = $::ipaddress,
@@ -74,5 +75,7 @@ define haproxy::config (
     content => template('haproxy/haproxy_config_block.erb'),
   }
 
-  Haproxy::Balancermember <<| listening_service == $name |>>
+  if $collect_exported {
+    Haproxy::Balancermember <<| listening_service == $name |>>
+  }
 }
